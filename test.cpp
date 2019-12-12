@@ -6,14 +6,15 @@
 
 using namespace std;
 
-void f(stack<int> &s){
-  s.push(5);
+void f(int &i){
+  i=100;
 }
 
 
 int main(){
-  stack<int> s;
-  f(s);
-  cout<< s.top()<<endl;
+int i=-2, j=0;
+if(1)if(i==-1)j=2;
+else if(i==-2)j=3;
+cout <<j<<endl;
   return 0;
 }
