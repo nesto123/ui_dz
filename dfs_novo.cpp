@@ -4,6 +4,7 @@
 #include <stack>
 #include <list>
 #include <queue>
+#include <algorithm>
 
 using namespace std;
 
@@ -24,6 +25,8 @@ public:
 
   bool pomak(size_t i, size_t j);
 
+friend bool operator==(const Board &a,const Board &b );
+
   //pomaci
   bool velika_kocka(pair<Board, Board>, list <Board> posjeceni, stack < pair<Board, Board> > &open);
 
@@ -32,23 +35,55 @@ public:
 
 
 };
-
-bool velika_kocka(pair<Board, Board> trenutni, list <Board> posjeceni, stack < pair<Board, Board> > &open){
-  Board temp:
-  temp = trenutni;
-  size_t i,j;
-
-  for ( i = 0; i < tenutni.map.size(); i++){
-    for( j = 0; j < trenutni.map[i].size() ; ++j){
-      if(ternutni.map[i][j] == 1) break;
-    }
-    if(ternutni.map[i][j] == 1) break;
-  }
-
-  if(i-1 >= 0 && ternutni.map[])//////////////////////////////////
-
+friend bool operator==(const Board &a,const Board  &b ){
 
 }
+ bool posjecen(list <Board> posjeceni, Board board){
+   //if( find(posjeceni.begin(), posjeceni.end(), board)== posjeceni.end())return false;
+   //else return true;
+ }
+
+bool velika_kocka_pomak(pair<Board, Board> trenutni, list <Board> posjeceni, stack < pair<Board, Board> > &open){
+  Board temp;
+  temp = trenutni.first;
+  size_t i,j;
+
+  for ( i = 0; i < trenutni.first.map.size(); i++){///postavljamo i,j na poziciju lijevog gornjeg vrha u kocki
+    for( j = 0; j < trenutni.first.map[i].size() ; ++j){
+      if(trenutni.first.map[i][j] == 1) break;
+    }
+    if(trenutni.first.map[i][j] == 1) break;
+  }
+///////////////////////slucajevi ovisno o poziciji nula
+  if(i-1 >= 0 && trenutni.first.map[i-1][j]==0 &&trenutni.first.map[i-1][j+1]==0 ){///ako je iznad kocke 0
+    temp.map[i-1][j]=temp.map[i-1][j+1]=1;
+    temp.map[i+1][j]=temp.map[i+1][j+1]=0;
+    if(!posjecen(posjeceni, temp))
+      open.push(make_pair(temp,trenutni.first));return true;
+  }
+  else if(i+2 < 5 && trenutni.first.map[i+2][j]==0 &&trenutni.first.map[i+2][j+1]==0 ){///ako je ispod kocke 0
+    temp.map[i+2][j]=temp.map[i+2][j+1]=1;
+    temp.map[i][j]=temp.map[i][j+1]=0;
+    if(!posjecen(posjeceni, temp))
+      open.push(make_pair(temp,trenutni.first));return true;
+  }
+  else if(j+2 < 4 && trenutni.first.map[i][j+2]==0 &&trenutni.first.map[i+1][j+2]==0 ){///ako je desno od kocke 0-- micemo ju u desno
+    temp.map[i][j+2]=temp.map[i+1][j+2]=1;
+    temp.map[i][j]=temp.map[i+1][j]=0;
+    if(!posjecen(posjeceni, temp))
+      open.push(make_pair(temp,trenutni.first));return true;
+  }
+  else if(j-1 >=0 && trenutni.first.map[i][j-1]==0 &&trenutni.first.map[i+1][j-1]==0 ){///ako je lijevo od kocke 0-- micemo ju u lijevo
+    temp.map[i][j-1]=temp.map[i+1][j-1]=1;
+    temp.map[i][j+1]=temp.map[i+1][j+1]=0;
+    if(!posjecen(posjeceni, temp))
+      open.push(make_pair(temp,trenutni.first));return true;
+  }
+  return false;
+}
+
+
+
 
   bool Board::pomak(size_t i, size_t j){}
 
@@ -87,7 +122,24 @@ bool Board::cilj(void){//provjerav jesmo li u ciljnom stanju
   else return false;
 }
 
+void expand_and_insert(pair<Board, Board> cvor, list <Board> posjeceni, stack < pair<Board, Board> > &open){
 
+}
+
+bool depthFirstSearch( Board b0){
+  stack < pair<Board, Board> > open; //trenutni, roditelj
+  list <Board> posjeceni;
+
+  open.push(make_pair(b0, b0));
+  while ( !open.empty() ){
+    auto temp = open.top();
+    if(temp.first.cilj()) break;//////gotovo nasli smo put do rj.... dovrsit
+    posjeceni.push_back(temp.first);
+    expand_and_insert(temp, posjeceni, open);
+
+  }
+
+}
 
 bool game(Board B, vector< Board > &rjesenje){///nije gotovo
 
@@ -121,19 +173,7 @@ bool game(Board B, vector< Board > &rjesenje){///nije gotovo
 }
 
 
-bool depthFirstSearch( Board b0){
-  stack < pair<Board, Board> > open; //trenutni, roditelj
-  list <Board> posjeceni;
 
-  open.push(make_pair(b0, b0));
-  while ( !open.empty() ){
-    auto temp = open.top();
-    posjeceni.push_back(temp.first);
-    expand_and_insert(temp, posjeceni, open);
-
-  }
-
-}
 
 
 
