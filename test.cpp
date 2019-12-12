@@ -3,18 +3,18 @@
 #include <queue>
 #include <list>
 #include <stack>
-
+#include<queue>
+#include<utility>
 using namespace std;
 
-void f(int &i){
-  i=100;
+void f(queue < pair < int, int > > &q){
+
 }
 
 
 int main(){
-int i=-2, j=0;
-if(1)if(i==-1)j=2;
-else if(i==-2)j=3;
-cout <<j<<endl;
+
+  queue < pair < int, int > > q;
+  f(q);
   return 0;
 }

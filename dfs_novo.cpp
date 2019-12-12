@@ -257,7 +257,7 @@ bool Board::input_initial_map( vector< vector<int> > initial_map){
 
 void Board::print ( void){
   for( size_t i = 0 ; i < map.size() ; ++i ){
-    for (size_t j = 0; j < map[i].size(); j++)
+    for (size_t j = 0; j < map[i].size(); ++j)
       cout<<map[i][j]<<" ";
     cout<<endl;
   }
@@ -307,6 +307,8 @@ bool depthFirstSearch( Board b0, queue < pair<Board, Board> > &put){
   stack < pair<Board, Board> > open; //trenutciljni, roditelj
   list <Board> posjeceni;
 
+  int provjera=0;
+
   open.push(make_pair(b0, b0));
   while ( !open.empty() ){
     auto temp = open.top();
@@ -316,6 +318,8 @@ bool depthFirstSearch( Board b0, queue < pair<Board, Board> > &put){
     posjeceni.push_back(temp.first);
     expand_and_insert(temp.first.slobodni_1,temp, posjeceni, open);
     expand_and_insert(temp.first.slobodni_2,temp, posjeceni, open);
+
+    cout<<++provjera<<" ";
   }
   return false;
 }
@@ -362,7 +366,7 @@ void okreni_red(queue < pair<Board, Board> > put){
   put = temp;
 
 }
-void nadi_slj(Board trazeni,queue < pair<Board, Board> > &put){
+void nadi_slj(Board trazeni,queue< pair< Board, Board > > &put){
   while( !(put.front().first == trazeni) ) put.pop();
 }
 void printrj(queue < pair<Board, Board> > put){
@@ -387,11 +391,12 @@ int main(){
                               {7,0,0,10} };
 
   Board board;
-queue < pair<Board, Board> > put;
+  queue< pair< Board, Board > > put;
 
   board.input_initial_map(input);
   board.print();
-  cout<<depthFirstSearch(board, put)<<endl;
+  cout<<"go";
+  cout<<depthFirstSearch(board, put)<<endl;////////////neće poslat put
   okreni_red(put);
   printrj(put);
 
