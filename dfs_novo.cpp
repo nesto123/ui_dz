@@ -366,14 +366,16 @@ void nadi_slj(Board trazeni,queue< pair< Board, Board > > &put){
 }
 void printrj(queue < pair<Board, Board> > put){
   pair<Board, Board> temp;
-
+cut<<"kmnsdflgsmnl";/*
   do{
     temp = make_pair(put.front().first,put.front().second);
     put.pop();
+    cout<<put.size();
     temp.first.print();
     if( !put.empty() )
       nadi_slj( temp.second, put );
-  }while( !put.empty() );
+    cout<<endl<<put.size();
+  }while( !put.empty() );*/
 }
 
 

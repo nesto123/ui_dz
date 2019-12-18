@@ -8,10 +8,6 @@
 #include <queue>
 using namespace std;
 
-#define DUBINA 7;
-
-
-
 class Board{
 public:
   vector< vector<int> > map;
@@ -71,7 +67,7 @@ bool operator==(const Board &a,const Board  &b ){
   return true;
 }
 
-Board::Board(const Board &obj){
+Board::Board(const Board &obj){//CCtor
   map = obj.map;
   find_free();
 }
@@ -99,7 +95,7 @@ bool vec_u_redu(Board temp, queue < pair<Board, Board> > open){
   return false;
 }
 
-/////////////////////////////////////////move
+///////////////////////////////////////// move -  pomaci ovisno o tome koji je oblik na mjestu trenutni
 
 bool mala_kocka(int index, pair<Board, Board> trenutni, list <Board> posjeceni, queue < pair<Board, Board> > &open){
   Board temp;
@@ -239,7 +235,7 @@ bool velika_kocka(pair<Board, Board> trenutni, list <Board> posjeceni, queue < p
   int i,j;
 
   postavi_index(trenutni.first, i,j,1);
-//cout<<"velika_kocka, i, j:"<<i<<", "<<j<<endl;
+
 ///////////////////////slucajevi ovisno o poziciji nula
   if(i-1 >= 0){
     if( trenutni.first.map[i-1][j]==0 &&trenutni.first.map[i-1][j+1]==0 ){///ako je iznad kocke 0
@@ -284,6 +280,8 @@ bool velika_kocka(pair<Board, Board> trenutni, list <Board> posjeceni, queue < p
   return false;
 }
 
+///////////////////////////////////// pomoćne fje za expand čvora
+
 void obradi(int i, int j,pair<Board, Board> cvor, list <Board> posjeceni, queue < pair<Board, Board> > &open){
   if( cvor.first.map[i][j] == 1 )
     velika_kocka(cvor, posjeceni, open);
@@ -310,6 +308,8 @@ void expand_and_insert(pair<int,int> slobodni,pair<Board, Board> cvor, list <Boa
     //cout<<endl;
 }
 
+/////////////////////////////////////////////       DFS
+
 bool breadthFirstSearch( Board b0, queue < pair<Board, Board> > &put){
   queue < pair<Board, Board> > open, open2; //trenutciljni, roditelj
   list <Board> posjeceni;
@@ -322,8 +322,10 @@ bool breadthFirstSearch( Board b0, queue < pair<Board, Board> > &put){
     open.pop();
     if(posjecen(posjeceni, temp.first))
       continue;
-    put.push(temp);
-    if(temp.first.cilj()) return true;//////gotovo nasli smo put do rj.... dovrsit--treba implementirat još pamćenje roditelja
+    put.push(temp); temp.first.print();
+    if(temp.first.cilj()) {
+      return true;//////gotovo nasli smo put do rj.... dovrsit--treba implementirat još pamćenje roditelja
+    }
     posjeceni.push_back(temp.first);
     expand_and_insert(temp.first.slobodni_1,temp, posjeceni, open);
     expand_and_insert(temp.first.slobodni_2,temp, posjeceni, open);
@@ -346,27 +348,32 @@ bool breadthFirstSearch( Board b0, queue < pair<Board, Board> > &put){
   return false;
 }
 
+///////////////pomoćne f-je za isis puta unatrag
 
 
-void okreni_red(queue < pair<Board, Board> > put){
-  queue < pair<Board, Board> > temp;
+void okreni_red(queue < pair<Board, Board> > &put){///okreće red za ispis
+  stack < pair<Board, Board> > stack;
 
   while(!put.empty()){
-    temp.push(put.front());
+    stack.push(put.front());
     put.pop();
   }
-  put = temp;
-
+  while(!stack.empty()){
+    put.push(stack.top());
+    stack.pop();
+  }
 }
 
-void nadi_slj(Board trazeni,queue< pair< Board, Board > > &put){
+void nadi_slj(Board trazeni,queue< pair< Board, Board > > &put){// traži trazeni Board u queue tj njegovog roditelja
   while( !(put.front().first == trazeni) ) put.pop();
 }
 
-void printrj(queue < pair<Board, Board> > put){
+void printrj(queue < pair<Board, Board> > put){///ispis rješenja, tj puta unatrag
   pair<Board, Board> temp;
+  int i=0;
 
   do{
+    cout<<"________________________"<< ++i<<". korak:"<<endl;
     temp = make_pair(put.front().first,put.front().second);
     put.pop();
     temp.first.print();
@@ -374,66 +381,51 @@ void printrj(queue < pair<Board, Board> > put){
       nadi_slj( temp.second, put );
   }while( !put.empty() );
 }
-/*
-bool f(Board b0){
-  stack < pair<Board, Board> > open; //trenutciljni, roditelj
-  list <Board> posjeceni;
 
-
-
-queue < pair<Board, Board> > put;
-  int provjera=0;
-
-  open.push(std::make_pair(b0, b0));
-  while ( !open.empty() ){cout<<"provjera na pocetlkui petlje:"<<provjera<<endl;
-    pair<Board, Board> temp = open.top();
-    open.pop();
-    put.push(temp);
-    if(temp.first.cilj())
-      return true;//////gotovo nasli smo put do rj.... dovrsit--treba implementirat još pamćenje roditelja
-    posjeceni.push_back(temp.first);
-    temp.first.print();
-    expand_and_insert(temp.first.slobodni_1,temp, posjeceni, open);
-    expand_and_insert(temp.first.slobodni_2,temp, posjeceni, open);cout<<"kor";
-
-    cout<<"provjera i siye opena na kraju "<<provjera++<<" "<<open.size()<<endl;
-  }
-
-  //cout<<"uso"<<endl;
-}
-*/
 int main(){
 
-/*  vector< vector<int> > input { {3,8,9,4},
-                              {3,2,2,4},
-                              {5,1,1,6},
-                              {5,1,1,6},
-                              {7,0,0,10} };*/
-/*
-                              vector< vector<int> > input { {3,1,1,4},
+//  vector< vector<int> > input { {3,8,9,4},        //radi, ima rj
+//                                {3,2,2,4},
+//                                {5,1,1,6},
+//                                {5,1,1,6},
+//                                {7,0,0,10} };
+
+                          /*    vector< vector<int> > input { {3,1,1,4},
                                                           {3,1,1,4},
                                                           {5,2,2,6},
                                                           {5,8,9,6},
                                                           {7,0,0,10} };*/
-                                                          vector< vector<int> > input { {3,7,10,4},
-                                                                                        {3,1,1,4},
-                                                                                        {5,1,1,6},
-                                                                                        {5,9,8,6},
-                                                                                        {0,2,2,0} };
+//vector< vector<int> > input { {3,2,2,4},/// radi? valjda, no nema rj
+//                              {3,1,1,4},
+//                              {5,1,1,6},
+//                              {5,9,8,6},
+//                              {7,0,0,10} };
+//vector< vector<int> > input { {3,2,2,4},      ///radiii, ima rj
+//                              {3,6,8,4},
+//                              {5,6,1,1},
+//                              {5,9,1,1},
+//                              {7,0,0,10} };
+//vector< vector<int> > input { {2,2,3,4},      ///oo-petlja
+//                              {1,1,3,4},
+//                              {1,1,0,7},
+//                              {5,6,9,8},
+//                              {5,6,0,10} };
+vector< vector<int> > input { {2,2,3,4},      ///oo-petlja
+                              {1,1,3,4},
+                              {1,1,0,6},
+                              {5,8,9,6},
+                              {5,7,0,10} };
   Board board;
   queue< pair< Board, Board > > put;
 
   board.input_initial_map(input);
   board.print();
 
-//f(board);
-  cout<<breadthFirstSearch(board, put)<<endl;////////////neće poslat put
-  //okreni_red(put);
-  //printrj(put);
-
-
-//unos mape  -- kasnije
-  ///cin<<
-
+  bool t=breadthFirstSearch(board, put);
+  cout<<"breadthFirstSearch: "<<t<<endl<<"Put unazad:"<<endl;
+  if( t ) {
+    okreni_red(put);
+    printrj(put);
+}
   return 0;
 }
