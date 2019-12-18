@@ -53,7 +53,7 @@ vector< vector<int> > input { {3,2,2,4},      ///radiii, ima rj
                               {3,6,8,4},
                               {5,6,1,1},
                               {5,9,1,1},
-                              {7,0,0,10} };
+                              {0,7,10,0} };
 
   Board board;
   queue< pair< Board, Board > > put;
