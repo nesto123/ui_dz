@@ -90,6 +90,17 @@ bool postavi_index(Board trenutni, int &i, int &j, int find_index){//nalazi nam 
   return false;
 }
 
+bool vec_u_redu(Board temp, queue < pair<Board, Board> > open){
+  while( !open.empty() ){
+    if( open.front().first == temp )
+      return true;
+    open.pop();
+  }
+  return false;
+}
+
+/////////////////////////////////////////move
+
 bool mala_kocka(int index, pair<Board, Board> trenutni, list <Board> posjeceni, queue < pair<Board, Board> > &open){
   Board temp;
   temp = trenutni.first;
@@ -101,7 +112,7 @@ bool mala_kocka(int index, pair<Board, Board> trenutni, list <Board> posjeceni, 
     if( temp.map[i-1][j] == 0){///iznad je 0, micemo ga gore
       temp.map[i-1][j]=index; temp.map[i][j]=0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -109,7 +120,7 @@ bool mala_kocka(int index, pair<Board, Board> trenutni, list <Board> posjeceni, 
     if( temp.map[i+1][j] == 0){///ispod je 0, micemo ga dole
       temp.map[i+1][j]=index; temp.map[i][j]=0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -117,7 +128,7 @@ bool mala_kocka(int index, pair<Board, Board> trenutni, list <Board> posjeceni, 
     if( temp.map[i][j-1] == 0){///lijevo je 0, micemo ga lijevo
       temp.map[i][j-1]=index; temp.map[i][j]=0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -125,7 +136,7 @@ bool mala_kocka(int index, pair<Board, Board> trenutni, list <Board> posjeceni, 
     if( temp.map[i][j+1] == 0){///iznad je 0, micemo ga gore
       temp.map[i][j+1]=index; temp.map[i][j]=0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -143,7 +154,7 @@ bool vertikalni_pravokutnik(int index,pair<Board, Board> trenutni, list <Board> 
     if( temp.map[i-1][j] == 0){///iznad je 0, micemo ga gore
       temp.map[i-1][j]=index; temp.map[i+1][j]=0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -151,7 +162,7 @@ bool vertikalni_pravokutnik(int index,pair<Board, Board> trenutni, list <Board> 
     if( temp.map[i+2][j] == 0){///ispod je 0, micemo ga dole
       temp.map[i+2][j]=index; temp.map[i][j]=0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -160,7 +171,7 @@ bool vertikalni_pravokutnik(int index,pair<Board, Board> trenutni, list <Board> 
       temp.map[i][j+1] = temp.map[i+1][j+1] = index;
       temp.map[i][j] = temp.map[i+1][j] = 0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -169,7 +180,7 @@ bool vertikalni_pravokutnik(int index,pair<Board, Board> trenutni, list <Board> 
       temp.map[i][j-1] = temp.map[i+1][j-1] = index;
       temp.map[i][j] = temp.map[i+1][j] = 0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -188,7 +199,7 @@ bool horizontalni_pravokutnik(int index, pair<Board, Board> trenutni, list <Boar
       temp.map[i-1][j] = temp.map[i-1][j+1] = index;
       temp.map[i][j] = temp.map[i][j+1] = 0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -197,7 +208,7 @@ bool horizontalni_pravokutnik(int index, pair<Board, Board> trenutni, list <Boar
       temp.map[i+1][j] = temp.map[i+1][j+1] = index;
       temp.map[i][j] = temp.map[i][j+1] = 0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -206,7 +217,7 @@ bool horizontalni_pravokutnik(int index, pair<Board, Board> trenutni, list <Boar
       temp.map[i][j+2] = index;
       temp.map[i][j] = 0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -215,7 +226,7 @@ bool horizontalni_pravokutnik(int index, pair<Board, Board> trenutni, list <Boar
       temp.map[i][j-1] = index;
       temp.map[i][j+1] = 0;
       temp.find_free();
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       temp = trenutni.first;
     }}
@@ -236,7 +247,7 @@ bool velika_kocka(pair<Board, Board> trenutni, list <Board> posjeceni, queue < p
       temp.map[i+1][j]=temp.map[i+1][j+1]=0;
       temp.slobodni_1.first = temp.slobodni_2.first = i+1;
       temp.slobodni_1.second = j; temp.slobodni_2.second = j+1;
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       return true;
     }}
@@ -246,7 +257,7 @@ bool velika_kocka(pair<Board, Board> trenutni, list <Board> posjeceni, queue < p
       temp.map[i][j]=temp.map[i][j+1]=0;
       temp.slobodni_1.first = temp.slobodni_2.first = i;
       temp.slobodni_1.second = j; temp.slobodni_2.second = j+1;
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       return true;
     }}
@@ -256,7 +267,7 @@ bool velika_kocka(pair<Board, Board> trenutni, list <Board> posjeceni, queue < p
       temp.map[i][j]=temp.map[i+1][j]=0;
       temp.slobodni_1.first = i;temp.slobodni_2.first = i+1;
       temp.slobodni_1.second = temp.slobodni_2.second = j;
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       return true;
     }}
@@ -266,7 +277,7 @@ bool velika_kocka(pair<Board, Board> trenutni, list <Board> posjeceni, queue < p
       temp.map[i][j+1]=temp.map[i+1][j+1]=0;
       temp.slobodni_1.first = i; temp.slobodni_2.first = i+1;
       temp.slobodni_1.second = temp.slobodni_2.second = j+1;
-      if(!posjecen(posjeceni, temp))
+      if(!posjecen(posjeceni, temp) && !vec_u_redu(temp,open) )
         open.push(make_pair(temp,trenutni.first));
       return true;
     }}
@@ -316,18 +327,20 @@ bool breadthFirstSearch( Board b0, queue < pair<Board, Board> > &put){
     posjeceni.push_back(temp.first);
     expand_and_insert(temp.first.slobodni_1,temp, posjeceni, open);
     expand_and_insert(temp.first.slobodni_2,temp, posjeceni, open);
-/*
-cout<<"temp trenutni:"<<endl;temp.first.print();
+
+
+    cout<<"temp trenutni:"<<endl;temp.first.print();
     open2=open;cout<<"print open:"<<endl;
       while(!open2.empty()){
-        open2.top().first.print();cout<<endl<<endl;
+        open2.front().first.print();cout<<endl<<endl;
         open2.pop();
       }
-    cout<<"provjera, open.size(): "<<++provjera<<", "<<open.size()<<endl;if(provjera==4 )break;*/
-  }
-/*
+    cout<<"provjera, open.size(), posjeceni.size(): "<<++provjera<<", "<<open.size()<<", "<<posjeceni.size()<<endl;
+    //if(provjera==1)break;
+  }/*
+  cout<<"van whilea, ostatak u listi open:"<<endl;
   while(!open.empty()){
-    open.top().first.print();cout<<endl<<endl;
+    open.front().first.print();cout<<endl<<endl;
     open.pop();
   }*/
   return false;
@@ -390,18 +403,23 @@ queue < pair<Board, Board> > put;
 }
 */
 int main(){
-/*
-  vector< vector<int> > input { {3,8,9,4},
+
+/*  vector< vector<int> > input { {3,8,9,4},
                               {3,2,2,4},
                               {5,1,1,6},
                               {5,1,1,6},
                               {7,0,0,10} };*/
-
+/*
                               vector< vector<int> > input { {3,1,1,4},
                                                           {3,1,1,4},
                                                           {5,2,2,6},
                                                           {5,8,9,6},
-                                                          {7,0,0,10} };
+                                                          {7,0,0,10} };*/
+                                                          vector< vector<int> > input { {3,7,10,4},
+                                                                                        {3,1,1,4},
+                                                                                        {5,1,1,6},
+                                                                                        {5,9,8,6},
+                                                                                        {0,2,2,0} };
   Board board;
   queue< pair< Board, Board > > put;
 
