@@ -39,21 +39,22 @@ void clear_put(  queue< pair< Board, Board > > &put){
 
 int main(){
 
-vector< vector<int> > input1 { {3,8,9,4},        //radi, ima rj
+vector< vector<int> > input { {3,2,2,4},      
+                              {3,6,8,4},
+                              {5,6,1,1},
+                              {5,9,1,1},
+                              {7,0,0,10} };
+vector< vector<int> > input1 { {3,8,9,4},
                               {3,2,2,4},
                               {5,1,1,6},
                               {5,1,1,6},
-                              {7,0,0,10} };
-vector< vector<int> > input2 { {3,2,2,4},/// radi? valjda, no nema rj
+                              {0,7,10,0} };
+vector< vector<int> > input2 { {3,2,2,4},
                               {3,1,1,4},
                               {5,1,1,6},
                               {5,9,8,6},
                               {7,0,0,10} };
-vector< vector<int> > input { {3,2,2,4},      ///radiii, ima rj
-                              {3,6,8,4},
-                              {5,6,1,1},
-                              {5,9,1,1},
-                              {0,7,10,0} };
+
 
   Board board;
   queue< pair< Board, Board > > put;

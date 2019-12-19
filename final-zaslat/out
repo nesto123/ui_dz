@@ -1,4 +1,6 @@
-user@user-ThinkPad-X1-Carbon:~/Documents/UI/final-zaslat$ time ./p
+user@user-ThinkPad-X1-Carbon:~/Documents/UI/ui_dz/final-zaslat$ g++ board.h board.cpp bfs.cpp main.cpp -std=c++17 -o p
+
+user@user-ThinkPad-X1-Carbon:~/Documents/UI/ui_dz/final-zaslat$ time ./p
 početna ploća:
 3 2 2 4 
 3 6 8 4 
@@ -84,7 +86,7 @@ ________________________12. korak:
 3 2 2 4 
 5 1 1 6 
 5 1 1 6 
-7 0 0 10 
+0 7 10 0 
 breadthFirstSearch: 1
 Put unazad:
 ________________________1. korak:
@@ -99,6 +101,18 @@ ________________________2. korak:
 5 1 1 6 
 5 1 1 6 
 7 0 0 10 
+________________________3. korak:
+3 8 9 4 
+3 2 2 4 
+5 1 1 6 
+5 1 1 6 
+7 0 10 0 
+________________________4. korak:
+3 8 9 4 
+3 2 2 4 
+5 1 1 6 
+5 1 1 6 
+0 7 10 0 
 ------------------------------------------početna ploća:
 3 2 2 4 
 3 1 1 4 
@@ -108,7 +122,7 @@ ________________________2. korak:
 breadthFirstSearch: 0
 Put unazad:
 
-real	0m37,883s
-user	0m37,381s
-sys	0m0,016s
+real	0m30,718s
+user	0m30,703s
+sys	0m0,012s
 
